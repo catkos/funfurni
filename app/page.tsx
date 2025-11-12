@@ -1,35 +1,9 @@
 "use client";
 import Image from "next/image";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import WelcomeArticle from "./articles/WelcomeArticle";
 import FeaturesArticle from "./articles/FeaturesArticle";
 import { useRef } from "react";
-
-const Card = ({ card }) => {
-  return (
-    <div
-      key={card.id}
-      className="group relative h-[450px] w-[450px] overflow-hidden bg-neutral-200"
-    >
-      <div
-        style={{
-          backgroundImage: `url(${card.url})`,
-
-          backgroundSize: "cover",
-
-          backgroundPosition: "center",
-        }}
-        className="absolute inset-0 z-0 transition-transform duration-300 group-hover:scale-110"
-      ></div>
-
-      <div className="absolute inset-0 z-10 grid place-content-center">
-        <p className="bg-gradient-to-br from-white/20 to-white/0 p-8 text-6xl font-black uppercase text-white backdrop-blur-lg">
-          {card.title}
-        </p>
-      </div>
-    </div>
-  );
-};
 
 export default function Home() {
   const { scrollYProgress } = useScroll({
@@ -38,15 +12,21 @@ export default function Home() {
   const containerRef = useRef(null);
   const { scrollYProgress: containerScrollYProgress } = useScroll({
     target: containerRef,
-
     offset: ["start start", "end end"],
   });
+
+  const welcomeRef = useRef(null);
+  const featuresRef = useRef(null);
+
+  // 👇 Track whether each article is in view
+  const welcomeInView = useInView(welcomeRef, { amount: 0.5 });
+  const featuresInView = useInView(featuresRef, { amount: 0.5 });
 
   const x = useTransform(containerScrollYProgress, [0, 1], ["0%", "-50%"]);
 
   // Transform scroll progress to width
-  const width = useTransform(scrollYProgress, [0, 0.5], ["20cqw", "60cqw"]);
-  const height = useTransform(scrollYProgress, [0, 0.5], ["20cqw", "40cqw"]);
+  const width = useTransform(scrollYProgress, [0, 0.5], ["30cqw", "60cqw"]);
+  const height = useTransform(scrollYProgress, [0, 0.5], ["10cqw", "40cqw"]);
   return (
     <main className="flex flex-col min-h-screen items-center justify-center bg-green">
       <section
@@ -55,7 +35,7 @@ export default function Home() {
       >
         <div className="relative z-10 h-screen flex flex-col items-center justify-center">
           <motion.h1
-            className="fixed uppercase text-6xl text-center z-10"
+            className="fixed font-chango uppercase text-6xl text-center text-green text-shadow-lg"
             style={{
               y: useTransform(scrollYProgress, [0, 0.5], ["0cqw", "-20cqw"]),
             }}
@@ -72,18 +52,36 @@ export default function Home() {
         {/* Invisible snap points for vertical scrolling */}
         <div className="absolute top-0 h-screen w-full snap-start snap-always pointer-events-none" />
         <div className="absolute top-[50vh] h-screen w-full snap-start snap-always pointer-events-none" />
-        <div className="sticky top-0 z-10 flex items-center justify-items-start overflow-hidden">
-          <motion.div style={{ x }} className="flex flex-nowrap">
-            <article className="shrink-0 w-screen h-screen flex items-center justify-center snap-start snap-always">
+
+        <div
+          id="clip-path-wrapper"
+          className="sticky top-0 z-10 flex items-center justify-items-start overflow-hidden"
+        >
+          <motion.div style={{ x }} className="flex flex-nowrap h-full">
+            <motion.article
+              ref={welcomeRef}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: welcomeInView ? 1 : 0 }}
+              transition={{ duration: 0.5 }}
+              id="welcome"
+              className="shrink-0 w-screen h-screen flex items-center justify-center snap-start snap-always"
+            >
               <WelcomeArticle />
-            </article>
-            <article className="shrink-0 w-screen h-screen flex items-center justify-center snap-start snap-always">
+            </motion.article>
+            <motion.article
+              ref={featuresRef}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: featuresInView ? 1 : 0 }}
+              transition={{ duration: 0.5 }}
+              className="shrink-0 w-screen h-screen flex items-center justify-center snap-start snap-always"
+            >
               <FeaturesArticle />
-            </article>
+            </motion.article>
           </motion.div>
         </div>
       </section>
 
+      {/* nav 
       <motion.div className="fixed top-[15cqw] right-[10cqw] z-50" style={{}}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -97,10 +95,11 @@ export default function Home() {
           />
         </svg>
       </motion.div>
+      */}
       {/* white block */}
       <motion.div
         id="scroll-indicator"
-        className="fixed z-0 rounded-lg bg-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+        className="fixed z-0 shadow-md rounded-lg bg-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
         style={{ width, height }}
       />
     </main>
