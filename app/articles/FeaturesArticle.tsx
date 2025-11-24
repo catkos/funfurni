@@ -15,18 +15,14 @@ const FeaturesArticle: React.FC = () => {
     <div className="flex h-[40cqw] w-[60cqw] items-center justify-center gap-8 p-10">
       <div className="w-1/2 flex justify-center order-last">
         <Image
-          src="/yellow-sofa.jpg"
-          alt="Picture of a rainbow plastic chair."
+          src="/table.png"
+          alt=""
           width={500}
           height={500}
-          className="shadow-md rounded-md"
           style={{ objectFit: "contain" }}
         />
       </div>
       <div className="w-1/2 flex flex-col gap-5">
-        <h2 className="text-3xl font-bold text-center font-montserrat">
-          Features
-        </h2>
         <ul className="list-none list-inside gap-3 grid grid-cols-2">
           {features.map((feature, index) => (
             <motion.li

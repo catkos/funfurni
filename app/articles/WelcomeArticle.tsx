@@ -6,8 +6,8 @@ const WelcomeArticle: React.FC = () => {
     <div className="flex h-full w-[60cqw] items-center justify-center gap-8 p-10">
       <div className="w-1/2 flex justify-center">
         <Image
-          src="/furniture-col.jpg"
-          alt="Picture of a rainbow plastic chair."
+          src="/interior.png"
+          alt=""
           width={500}
           height={500}
           style={{ objectFit: "contain" }}

@@ -18,7 +18,6 @@ export default function Home() {
   const welcomeRef = useRef(null);
   const featuresRef = useRef(null);
 
-  // 👇 Track whether each article is in view
   const welcomeInView = useInView(welcomeRef, { amount: 0.5 });
   const featuresInView = useInView(featuresRef, { amount: 0.5 });
 
@@ -102,6 +101,9 @@ export default function Home() {
         className="fixed z-0 shadow-md rounded-lg bg-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
         style={{ width, height }}
       />
+      <section id="hello" className=" w-full h-full bg-blue-400">
+        <h2>hello</h2>
+      </section>
     </main>
   );
 }
